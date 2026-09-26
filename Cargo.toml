@@ -1,0 +1,27 @@
+[package]
+name = "autopro"
+version = "0.1.0"
+edition = "2024"
+description = "Model pre- and postprocessing: images, audio and text to tensors (compatible with Hugging Face processors), detection NMS, clustering and OCR (PaddleOCR)."
+
+[dependencies]
+hound = "3.5.1"
+image = "0.25.10"
+ndarray = "0.17.2"
+prost = "0.14.4"
+realfft = "3.5.0"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+thiserror = "2.0.21"
+# Pure-Rust regex backend: no C/C++ build, portable to mobile targets.
+tokenizers = { version = "0.23.2", default-features = false, features = ["fancy-regex"] }
+
+# Matrix products (clustering distances) use BLAS where it's free:
+# `platform-blas` (default) calls Accelerate on Apple platforms. `blas`
+# switches on ndarray's BLAS backend for everything else; the final binary
+# must then link a BLAS, e.g. via blas-src with OpenBLAS. Without either,
+# ndarray's own matrixmultiply is used.
+[features]
+default = ["platform-blas"]
+platform-blas = []
+blas = ["ndarray/blas"]
