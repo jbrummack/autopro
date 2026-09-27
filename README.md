@@ -21,6 +21,12 @@ let pixels = processor.process(&autopro::image::decode(&bytes)?);               
   `LongestEdge`, `Multiple` for patch models incl. Qwen2-VL `smart_resize`).
 - HF center crop (floor offsets, zero padding), rescale, normalize, RGB/BGR, CHW/HWC.
 - `letterbox` for YOLO inputs (Ultralytics geometry; Pillow resampling, not OpenCV's).
+- `TileProcessor` (`image::tiling`): docling's VLM pipeline (Granite Docling,
+  Idefics3 / SmolVLM architecture) splits a page image into fixed-size tiles
+  plus a low-res global view instead of squashing it into one square; matches
+  `Idefics3ImageProcessor` / `SmolVLMImageProcessor` (`do_image_splitting`),
+  same geometry as `preprocessor_config.json` (`size.longest_edge`,
+  `max_image_size.longest_edge`).
 
 ## Audio — `autopro::audio`
 
@@ -145,6 +151,16 @@ to 4 (last-bit differences in the homography move a few samples to the
 neighboring 1/32 pixel); `minAreaRect` on arbitrary point sets identical up to
 ties between equal-area rectangles. OpenCV builds without FMA contraction
 (e.g. x86) round some rectangles differently in the last bit.
+
+Image-tiling fixtures (`Idefics3ImageProcessor`'s splitting, ported to Pillow
+since that file now requires torch/torchvision) need only Pillow and numpy,
+no flake:
+
+```sh
+cd reference && python make_docling_fixtures.py ../tests/fixtures/docling
+```
+
+Results: tile counts and pixel values identical to the ported reference.
 
 Not covered yet: `tokenizer_config.json` / feature-extractor config loading,
 "fast" (torchvision) image processors, MP3/FLAC decoding, EXIF orientation.

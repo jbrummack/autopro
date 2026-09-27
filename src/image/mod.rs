@@ -5,6 +5,7 @@
 //! rescale (in f64, stored as f32), normalize (in f32), then order channels
 //! and lay them out.
 pub mod resample;
+pub mod tiling;
 
 use ::image::{DynamicImage, RgbImage};
 use ndarray::{Array3, ArrayD};
@@ -12,6 +13,7 @@ use serde_json::Value;
 
 use crate::error::{Error, Result};
 pub use resample::Filter;
+pub use tiling::{TileProcessor, Tiles};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum ChannelOrder {

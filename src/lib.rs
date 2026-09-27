@@ -1,7 +1,8 @@
 //! autopro: turns raw model inputs into tensors and model outputs into results, in the spirit of Hugging
 //! Face's `AutoProcessor`, and matching its (slow, reference) processors.
 //!
-//! - [`image`]: decode, resize (Pillow-exact), crop, rescale, normalize, RGB/BGR, CHW/HWC.
+//! - [`image`]: decode, resize (Pillow-exact), crop, rescale, normalize, RGB/BGR, CHW/HWC,
+//!   tile (docling's VLM pipeline).
 //! - [`audio`]: WAV decoding, resampling, waveforms and (log-)mel spectrograms (Whisper-compatible).
 //! - [`text`]: SentencePiece `.model` files (native implementation) and `tokenizer.json`.
 //!
